@@ -1,0 +1,1554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TalentVerse — APLM by Sarah-Praise</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root {
+  --tv-bg: #0A0A14;
+  --tv-surface: #12121F;
+  --tv-surface2: #1A1A2E;
+  --tv-border: rgba(120,100,255,0.18);
+  --tv-purple: #7C5CFC;
+  --tv-pink: #F45CA3;
+  --tv-teal: #00D9C0;
+  --tv-amber: #FFB830;
+  --tv-green: #4AE580;
+  --tv-text: #F0EDFF;
+  --tv-muted: #8A87A5;
+  --tv-glow: 0 0 30px rgba(124,92,252,0.25);
+  --nav-h: 70px;
+  --radius: 16px;
+  --font-head: 'Syne', sans-serif;
+  --font-body: 'Space Grotesk', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--tv-bg);
+  color: var(--tv-text);
+  font-family: var(--font-body);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+/* Stars background */
+body::before {
+  content:'';
+  position:fixed; inset:0;
+  background: radial-gradient(ellipse at 20% 20%, rgba(124,92,252,0.08) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 80%, rgba(0,217,192,0.06) 0%, transparent 60%);
+  pointer-events:none; z-index:0;
+}
+/* NAV */
+nav {
+  position:fixed; top:0; left:0; right:0; height:var(--nav-h);
+  background: rgba(10,10,20,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--tv-border);
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 0 2rem; z-index:1000;
+}
+.nav-logo {
+  font-family: var(--font-head);
+  font-size: 1.6rem; font-weight:800;
+  background: linear-gradient(135deg, var(--tv-purple), var(--tv-pink), var(--tv-teal));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; cursor:pointer;
+}
+.nav-links { display:flex; gap:0.25rem; }
+.nav-btn {
+  background:none; border:none; color:var(--tv-muted);
+  font-family:var(--font-body); font-size:0.85rem; font-weight:500;
+  padding:0.5rem 1rem; border-radius:50px; cursor:pointer;
+  transition: all 0.2s; white-space:nowrap;
+}
+.nav-btn:hover, .nav-btn.active {
+  color:var(--tv-text); background:rgba(124,92,252,0.15);
+}
+.nav-btn.active { color:var(--tv-purple); }
+.nav-aplm {
+  background: linear-gradient(135deg,var(--tv-purple),var(--tv-pink));
+  color:white !important; padding:0.5rem 1.25rem; border-radius:50px;
+  font-weight:600; font-size:0.85rem; border:none; cursor:pointer;
+  transition:transform 0.2s, box-shadow 0.2s; display:inline-flex; align-items:center;
+}
+.nav-aplm:hover { transform:translateY(-1px); box-shadow: 0 4px 20px rgba(124,92,252,0.4); }
+
+/* PAGES */
+.page { display:none; min-height:100vh; padding-top:var(--nav-h); position:relative; z-index:1; }
+.page.active { display:block; }
+
+/* ====== HOME PAGE ====== */
+.hero {
+  min-height: calc(100vh - var(--nav-h));
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center; padding:3rem 2rem; position:relative; overflow:hidden;
+}
+.hero-orbs {
+  position:absolute; inset:0; pointer-events:none;
+}
+.orb {
+  position:absolute; border-radius:50%;
+  filter: blur(80px); opacity:0.15;
+  animation: orb-float 8s ease-in-out infinite;
+}
+.orb-1 { width:400px;height:400px;background:var(--tv-purple);top:-100px;left:-100px; }
+.orb-2 { width:300px;height:300px;background:var(--tv-pink);bottom:-50px;right:10%; animation-delay:-3s; }
+.orb-3 { width:250px;height:250px;background:var(--tv-teal);top:30%;left:60%; animation-delay:-5s; }
+@keyframes orb-float {
+  0%,100%{transform:translate(0,0) scale(1);}
+  33%{transform:translate(20px,-20px) scale(1.05);}
+  66%{transform:translate(-15px,10px) scale(0.95);}
+}
+.hero-badge {
+  display:inline-flex; align-items:center; gap:0.5rem;
+  background:rgba(124,92,252,0.15); border:1px solid rgba(124,92,252,0.3);
+  border-radius:50px; padding:0.4rem 1.2rem; font-size:0.8rem;
+  color:var(--tv-purple); font-weight:600; margin-bottom:1.5rem;
+  letter-spacing:0.05em; text-transform:uppercase;
+}
+.hero-badge::before { content:'✦'; font-size:0.6rem; }
+.hero-title {
+  font-family:var(--font-head); font-size:clamp(2.5rem,6vw,5rem);
+  font-weight:800; line-height:1.05; margin-bottom:1rem;
+}
+.hero-title span {
+  background: linear-gradient(135deg, var(--tv-purple) 0%, var(--tv-pink) 50%, var(--tv-teal) 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+}
+.hero-sub {
+  font-size:clamp(1rem,2vw,1.2rem); color:var(--tv-muted); max-width:600px;
+  margin:0 auto 2.5rem; line-height:1.7;
+}
+.hero-cta { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; }
+.btn-primary {
+  background: linear-gradient(135deg,var(--tv-purple),var(--tv-pink));
+  color:white; border:none; padding:1rem 2.5rem; border-radius:50px;
+  font-family:var(--font-body); font-size:1rem; font-weight:600; cursor:pointer;
+  transition:all 0.3s; box-shadow: 0 4px 30px rgba(124,92,252,0.3);
+}
+.btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 40px rgba(124,92,252,0.5); }
+.btn-ghost {
+  background:none; color:var(--tv-text); border:1px solid var(--tv-border);
+  padding:1rem 2.5rem; border-radius:50px;
+  font-family:var(--font-body); font-size:1rem; font-weight:500; cursor:pointer;
+  transition:all 0.3s;
+}
+.btn-ghost:hover { border-color:var(--tv-purple); color:var(--tv-purple); }
+
+.stats-strip {
+  display:flex; justify-content:center; gap:3rem; flex-wrap:wrap;
+  padding:2rem; border-top:1px solid var(--tv-border); border-bottom:1px solid var(--tv-border);
+  background:rgba(18,18,31,0.6); backdrop-filter:blur(10px);
+}
+.stat-item { text-align:center; }
+.stat-num { font-family:var(--font-head); font-size:2.2rem; font-weight:800; }
+.stat-num.purple { color:var(--tv-purple); }
+.stat-num.pink { color:var(--tv-pink); }
+.stat-num.teal { color:var(--tv-teal); }
+.stat-label { font-size:0.8rem; color:var(--tv-muted); text-transform:uppercase; letter-spacing:0.05em; }
+
+/* Features grid */
+.section { padding:5rem 2rem; max-width:1200px; margin:0 auto; }
+.section-label { color:var(--tv-purple); font-size:0.8rem; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.75rem; }
+.section-title { font-family:var(--font-head); font-size:clamp(1.8rem,3.5vw,2.8rem); font-weight:700; margin-bottom:1rem; }
+.section-sub { color:var(--tv-muted); max-width:520px; line-height:1.7; margin-bottom:3rem; }
+
+.features-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1.5rem; }
+.feature-card {
+  background:var(--tv-surface); border:1px solid var(--tv-border);
+  border-radius:var(--radius); padding:2rem;
+  transition:all 0.3s; position:relative; overflow:hidden;
+}
+.feature-card::before {
+  content:''; position:absolute; inset:0;
+  background: linear-gradient(135deg, rgba(124,92,252,0.05) 0%, transparent 60%);
+  opacity:0; transition:opacity 0.3s;
+}
+.feature-card:hover { transform:translateY(-4px); border-color:rgba(124,92,252,0.4); box-shadow:0 10px 40px rgba(124,92,252,0.15); }
+.feature-card:hover::before { opacity:1; }
+.feature-icon {
+  width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+  font-size:1.5rem;margin-bottom:1.25rem;
+}
+.icon-purple { background:rgba(124,92,252,0.15); }
+.icon-pink { background:rgba(244,92,163,0.15); }
+.icon-teal { background:rgba(0,217,192,0.15); }
+.icon-amber { background:rgba(255,184,48,0.15); }
+.feature-title { font-family:var(--font-head); font-size:1.1rem; font-weight:700; margin-bottom:0.5rem; }
+.feature-desc { color:var(--tv-muted); font-size:0.9rem; line-height:1.6; }
+
+/* ====== DASHBOARD PAGE ====== */
+.dashboard { padding: calc(var(--nav-h) + 2rem) 2rem 2rem; max-width:1400px; margin:0 auto; }
+.dash-header { margin-bottom:2rem; }
+.dash-title { font-family:var(--font-head); font-size:1.8rem; font-weight:700; }
+.dash-sub { color:var(--tv-muted); font-size:0.9rem; margin-top:0.25rem; }
+
+.metrics-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:1rem; margin-bottom:2rem; }
+.metric-card {
+  background:var(--tv-surface); border:1px solid var(--tv-border);
+  border-radius:var(--radius); padding:1.5rem; position:relative; overflow:hidden;
+}
+.metric-card::after {
+  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+}
+.metric-card.m-purple::after { background:var(--tv-purple); }
+.metric-card.m-pink::after { background:var(--tv-pink); }
+.metric-card.m-teal::after { background:var(--tv-teal); }
+.metric-card.m-amber::after { background:var(--tv-amber); }
+.metric-card.m-green::after { background:var(--tv-green); }
+.metric-label { font-size:0.78rem; color:var(--tv-muted); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.5rem; }
+.metric-val { font-family:var(--font-head); font-size:2rem; font-weight:800; margin-bottom:0.25rem; }
+.metric-change { font-size:0.78rem; }
+.metric-change.up { color:var(--tv-green); }
+.metric-change.down { color:#F45CA3; }
+
+.dash-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-bottom:2rem; }
+@media(max-width:900px){.dash-grid{grid-template-columns:1fr;}}
+.dash-card {
+  background:var(--tv-surface); border:1px solid var(--tv-border);
+  border-radius:var(--radius); padding:1.75rem;
+}
+.dash-card-title { font-family:var(--font-head); font-weight:600; font-size:1.05rem; margin-bottom:1.25rem; display:flex; justify-content:space-between; align-items:center; }
+.dash-card-full { grid-column:1 / -1; }
+
+/* Speedometer */
+.speedometers-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1.5rem; margin-bottom:2rem; }
+.speedo-wrap {
+  background:var(--tv-surface); border:1px solid var(--tv-border);
+  border-radius:var(--radius); padding:1.75rem; text-align:center;
+}
+.speedo-title { font-size:0.85rem; color:var(--tv-muted); margin-bottom:1rem; text-transform:uppercase; letter-spacing:0.04em; }
+canvas.speedo { display:block; margin:0 auto; }
+.speedo-val { font-family:var(--font-head); font-size:2rem; font-weight:800; margin-top:0.5rem; }
+.speedo-sub { font-size:0.78rem; color:var(--tv-muted); margin-top:0.2rem; }
+
+/* Input row for dashboard */
+.input-row { display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:2rem; }
+.input-group { display:flex; flex-direction:column; gap:0.4rem; flex:1; min-width:150px; }
+.input-group label { font-size:0.78rem; color:var(--tv-muted); text-transform:uppercase; letter-spacing:0.05em; }
+.tv-input {
+  background:var(--tv-surface2); border:1px solid var(--tv-border); color:var(--tv-text);
+  border-radius:10px; padding:0.65rem 1rem; font-family:var(--font-body); font-size:0.9rem;
+  outline:none; transition:border-color 0.2s;
+}
+.tv-input:focus { border-color:var(--tv-purple); }
+.tv-input::placeholder { color:var(--tv-muted); }
+select.tv-input option { background:var(--tv-surface2); }
+.btn-submit {
+  background:linear-gradient(135deg,var(--tv-purple),var(--tv-pink));
+  color:white; border:none; padding:0.65rem 2rem; border-radius:10px;
+  font-family:var(--font-body); font-size:0.9rem; font-weight:600; cursor:pointer;
+  transition:all 0.2s; align-self:flex-end;
+}
+.btn-submit:hover { transform:translateY(-1px); box-shadow:0 4px 20px rgba(124,92,252,0.4); }
+
+/* ====== DISCOVER PAGE ====== */
+.discover { padding: calc(var(--nav-h) + 2rem) 2rem 2rem; max-width:1200px; margin:0 auto; }
+.quiz-card {
+  background:var(--tv-surface); border:1px solid var(--tv-border);
+  border-radius:var(--radius); padding:2.5rem; max-width:700px; margin:0 auto 2rem;
+}
+.quiz-progress { height:4px; background:var(--tv-surface2); border-radius:2px; margin-bottom:2rem; overflow:hidden; }
+.quiz-progress-fill { height:100%; background:linear-gradient(90deg,var(--tv-purple),var(--tv-pink)); border-radius:2px; transition:width 0.5s ease; }
+.quiz-q { font-family:var(--font-head); font-size:1.3rem; font-weight:700; margin-bottom:1.75rem; }
+.quiz-options { display:grid; gap:0.75rem; }
+.quiz-option {
+  background:var(--tv-surface2); border:1px solid var(--tv-border);
+  border-radius:12px; padding:1rem 1.25rem; cursor:pointer;
+  transition:all 0.2s; text-align:left; color:var(--tv-text);
+  font-family:var(--font-body); font-size:0.95rem;
+}
+.quiz-option:hover { border-color:var(--tv-purple); background:rgba(124,92,252,0.1); }
+.quiz-option.selected { border-color:var(--tv-purple); background:rgba(124,92,252,0.2); color:var(--tv-purple); }
+.quiz-nav { display:flex; justify-content:space-between; margin-top:2rem; }
+
+.talent-result {
+  display:none; max-width:700px; margin:0 auto;
+  background:var(--tv-surface); border:1px solid var(--tv-border);
+  border-radius:var(--radius); padding:2.5rem; text-align:center;
+}
+.talent-result.show { display:block; }
+.result-emoji { font-size:4rem; margin-bottom:1rem; }
+.result-title { font-family:var(--font-head); font-size:1.8rem; font-weight:800; margin-bottom:0.75rem; }
+.result-desc { color:var(--tv-muted); line-height:1.7; margin-bottom:2rem; }
+.talent-tags { display:flex; flex-wrap:wrap; gap:0.5rem; justify-content:center; margin-bottom:2rem; }
+.talent-tag {
+  background:rgba(124,92,252,0.15); border:1px solid rgba(124,92,252,0.3);
+  color:var(--tv-purple); padding:0.35rem 1rem; border-radius:50px; font-size:0.82rem; font-weight:500;
+}
+.radar-wrap { max-width:320px; margin:0 auto 2rem; }
+
+/* ====== COMMUNITY PAGE ====== */
+.community { padding: calc(var(--nav-h) + 2rem) 2rem 2rem; max-width:1200px; margin:0 auto; }
+.problems-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:1.5rem; margin-bottom:2rem; }
+.problem-card {
+  background:var(--tv-surface); border:1px solid var(--tv-border);
+  border-radius:var(--radius); padding:1.75rem; cursor:pointer; transition:all 0.3s;
+}
+.problem-card:hover { transform:translateY(-3px); border-color:rgba(0,217,192,0.4); }
+.problem-tag {
+  display:inline-block; padding:0.25rem 0.75rem; border-radius:50px; font-size:0.75rem; font-weight:600; margin-bottom:1rem;
+}
+.tag-env { background:rgba(74,229,128,0.15); color:var(--tv-green); border:1px solid rgba(74,229,128,0.3); }
+.tag-edu { background:rgba(0,217,192,0.15); color:var(--tv-teal); border:1px solid rgba(0,217,192,0.3); }
+.tag-health { background:rgba(244,92,163,0.15); color:var(--tv-pink); border:1px solid rgba(244,92,163,0.3); }
+.tag-tech { background:rgba(124,92,252,0.15); color:var(--tv-purple); border:1px solid rgba(124,92,252,0.3); }
+.problem-title { font-family:var(--font-head); font-size:1.1rem; font-weight:700; margin-bottom:0.5rem; }
+.problem-desc { color:var(--tv-muted); font-size:0.88rem; line-height:1.6; margin-bottom:1rem; }
+.problem-meta { display:flex; gap:1rem; font-size:0.78rem; color:var(--tv-muted); }
+.problem-meta span { display:flex; align-items:center; gap:0.3rem; }
+
+.post-form {
+  background:var(--tv-surface); border:1px solid var(--tv-border);
+  border-radius:var(--radius); padding:1.75rem; margin-bottom:2rem;
+}
+.post-form-title { font-family:var(--font-head); font-weight:700; font-size:1.1rem; margin-bottom:1.25rem; }
+.tv-textarea {
+  width:100%; background:var(--tv-surface2); border:1px solid var(--tv-border); color:var(--tv-text);
+  border-radius:10px; padding:0.75rem 1rem; font-family:var(--font-body); font-size:0.9rem;
+  outline:none; resize:vertical; transition:border-color 0.2s;
+}
+.tv-textarea:focus { border-color:var(--tv-purple); }
+.leaderboard {
+  background:var(--tv-surface); border:1px solid var(--tv-border);
+  border-radius:var(--radius); padding:1.75rem;
+}
+.lb-row { display:flex; align-items:center; gap:1rem; padding:0.75rem 0; border-bottom:1px solid var(--tv-border); }
+.lb-row:last-child { border-bottom:none; }
+.lb-rank { font-family:var(--font-head); font-size:1.2rem; font-weight:800; min-width:2rem; }
+.lb-rank.gold { color:var(--tv-amber); }
+.lb-rank.silver { color:var(--tv-muted); }
+.lb-rank.bronze { color:#CD7F32; }
+.lb-avatar {
+  width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-weight:700; font-size:0.9rem;
+}
+.lb-name { flex:1; font-weight:500; }
+.lb-pts { font-family:var(--font-mono); font-size:0.9rem; color:var(--tv-purple); }
+
+/* ====== APLM PAGE ====== */
+.aplm { padding: calc(var(--nav-h) + 2rem) 2rem 2rem; max-width:1100px; margin:0 auto; }
+.aplm-hero {
+  background:var(--tv-surface); border:1px solid var(--tv-border);
+  border-radius:24px; padding:3rem; margin-bottom:2rem;
+  background: linear-gradient(135deg, rgba(124,92,252,0.1) 0%, rgba(0,217,192,0.05) 100%);
+  border-color:rgba(124,92,252,0.3);
+}
+.aplm-title { font-family:var(--font-head); font-size:clamp(1.5rem,3vw,2.5rem); font-weight:800; margin-bottom:0.75rem; }
+.aplm-title span { background:linear-gradient(135deg,var(--tv-purple),var(--tv-teal)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.aplm-desc { color:var(--tv-muted); line-height:1.8; max-width:700px; margin-bottom:2rem; }
+.aplm-pillars { display:grid; grid-template-columns:repeat(3,1fr); gap:1.25rem; }
+@media(max-width:700px){.aplm-pillars{grid-template-columns:1fr;}}
+.pillar {
+  background:rgba(0,0,0,0.3); border-radius:12px; padding:1.5rem; border:1px solid var(--tv-border);
+}
+.pillar-icon { font-size:2rem; margin-bottom:0.75rem; }
+.pillar-name { font-family:var(--font-head); font-size:1rem; font-weight:700; margin-bottom:0.4rem; }
+.pillar-desc { font-size:0.84rem; color:var(--tv-muted); line-height:1.6; }
+
+.learning-path {
+  background:var(--tv-surface); border:1px solid var(--tv-border);
+  border-radius:var(--radius); padding:2rem; margin-bottom:2rem;
+}
+.path-steps { display:flex; flex-direction:column; gap:0; position:relative; }
+.path-step { display:flex; gap:1.5rem; position:relative; padding-bottom:2rem; }
+.path-step:last-child { padding-bottom:0; }
+.path-step::before {
+  content:''; position:absolute; left:18px; top:36px; bottom:0;
+  width:2px; background:linear-gradient(var(--tv-purple),transparent);
+}
+.path-step:last-child::before { display:none; }
+.step-num {
+  width:36px; height:36px; border-radius:50%; flex-shrink:0;
+  background:linear-gradient(135deg,var(--tv-purple),var(--tv-pink));
+  display:flex; align-items:center; justify-content:center;
+  font-weight:800; font-size:0.85rem; z-index:1;
+}
+.step-body { flex:1; }
+.step-title { font-family:var(--font-head); font-weight:700; margin-bottom:0.3rem; }
+.step-desc { color:var(--tv-muted); font-size:0.88rem; line-height:1.6; }
+
+/* AI Chat */
+.ai-chat {
+  background:var(--tv-surface); border:1px solid var(--tv-border);
+  border-radius:var(--radius); padding:1.75rem;
+}
+.chat-messages { min-height:200px; max-height:400px; overflow-y:auto; margin-bottom:1rem; display:flex; flex-direction:column; gap:1rem; }
+.chat-msg { display:flex; gap:0.75rem; }
+.chat-msg.user { flex-direction:row-reverse; }
+.chat-avatar {
+  width:36px;height:36px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;
+}
+.av-ai { background:linear-gradient(135deg,var(--tv-purple),var(--tv-teal)); }
+.av-user { background:linear-gradient(135deg,var(--tv-pink),var(--tv-amber)); }
+.chat-bubble {
+  max-width:80%; padding:0.75rem 1rem; border-radius:14px; font-size:0.9rem; line-height:1.6;
+}
+.msg-ai .chat-bubble { background:var(--tv-surface2); border:1px solid var(--tv-border); border-radius:14px 14px 14px 4px; }
+.msg-user .chat-bubble { background:linear-gradient(135deg,rgba(124,92,252,0.3),rgba(244,92,163,0.2)); border:1px solid rgba(124,92,252,0.3); border-radius:14px 14px 4px 14px; }
+.chat-typing { display:none; align-items:center; gap:0.4rem; padding:0.75rem 1rem; background:var(--tv-surface2); border-radius:14px 14px 14px 4px; width:fit-content; }
+.chat-typing.show { display:flex; }
+.dot { width:6px;height:6px;border-radius:50%;background:var(--tv-muted);animation:bounce 1.2s infinite; }
+.dot:nth-child(2){animation-delay:0.2s;}
+.dot:nth-child(3){animation-delay:0.4s;}
+@keyframes bounce{ 0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);} }
+.chat-input-row { display:flex; gap:0.75rem; }
+.chat-input { flex:1; }
+
+/* ====== ABOUT PAGE ====== */
+.about { padding: calc(var(--nav-h) + 2rem) 2rem 2rem; max-width:1000px; margin:0 auto; }
+.founder-card {
+  background:var(--tv-surface); border:1px solid var(--tv-border);
+  border-radius:24px; padding:3rem; margin-bottom:2rem;
+  display:grid; grid-template-columns:auto 1fr; gap:2.5rem; align-items:start;
+}
+@media(max-width:700px){.founder-card{grid-template-columns:1fr; text-align:center;}}
+.founder-avatar {
+  width:140px;height:140px;border-radius:50%;
+  background:linear-gradient(135deg,var(--tv-purple),var(--tv-pink),var(--tv-teal));
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-head); font-size:3rem; font-weight:800; color:white;
+  flex-shrink:0; position:relative;
+}
+.founder-avatar::after {
+  content:''; position:absolute;inset:-4px;border-radius:50%;
+  background:linear-gradient(135deg,var(--tv-purple),var(--tv-teal));
+  z-index:-1; opacity:0.5;
+}
+.founder-name { font-family:var(--font-head); font-size:2rem; font-weight:800; margin-bottom:0.25rem; }
+.founder-title { color:var(--tv-purple); font-weight:600; margin-bottom:1rem; }
+.founder-bio { color:var(--tv-muted); line-height:1.85; margin-bottom:1.5rem; }
+.founder-tags { display:flex; flex-wrap:wrap; gap:0.5rem; }
+.founder-tag {
+  background:rgba(124,92,252,0.1); border:1px solid rgba(124,92,252,0.25);
+  color:var(--tv-purple); padding:0.3rem 0.9rem; border-radius:50px; font-size:0.8rem; font-weight:500;
+}
+
+/* ====== TOAST ====== */
+.toast {
+  position:fixed; bottom:2rem; right:2rem; z-index:9999;
+  background:var(--tv-surface2); border:1px solid var(--tv-purple);
+  border-radius:12px; padding:1rem 1.5rem; min-width:250px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  transform:translateY(100px); opacity:0; transition:all 0.3s;
+}
+.toast.show { transform:translateY(0); opacity:1; }
+.toast-msg { font-size:0.9rem; color:var(--tv-text); }
+
+/* Scrollbar */
+::-webkit-scrollbar { width:6px; }
+::-webkit-scrollbar-track { background:var(--tv-bg); }
+::-webkit-scrollbar-thumb { background:var(--tv-border); border-radius:3px; }
+::-webkit-scrollbar-thumb:hover { background:var(--tv-purple); }
+
+/* Animations */
+@keyframes fadeIn { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);} }
+.fade-in { animation:fadeIn 0.5s ease forwards; }
+
+.chip-row { display:flex; flex-wrap:wrap; gap:0.5rem; margin-bottom:1.5rem; }
+.chip {
+  background:var(--tv-surface2); border:1px solid var(--tv-border);
+  border-radius:50px; padding:0.3rem 0.85rem; font-size:0.8rem; cursor:pointer;
+  transition:all 0.2s; color:var(--tv-muted);
+}
+.chip:hover,.chip.active { background:rgba(124,92,252,0.15); border-color:var(--tv-purple); color:var(--tv-purple); }
+
+/* ====== MOBILE NAV ====== */
+.nav-hamburger {
+  display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:0.5rem;
+}
+.nav-hamburger span {
+  display:block; width:22px; height:2px; background:var(--tv-text); border-radius:2px; transition:all 0.3s;
+}
+.mobile-menu {
+  display:none; position:fixed; top:var(--nav-h); left:0; right:0;
+  background:rgba(10,10,20,0.97); backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--tv-border); z-index:999;
+  flex-direction:column; padding:1rem;
+}
+.mobile-menu.open { display:flex; }
+.mobile-menu .nav-btn { text-align:left; padding:0.85rem 1rem; font-size:1rem; border-radius:10px; }
+.mobile-menu .nav-aplm { margin-top:0.5rem; text-align:center; padding:0.85rem; border-radius:10px; }
+
+/* ====== MOBILE RESPONSIVE ====== */
+@media(max-width:768px) {
+  .nav-links, #nav-aplm-cta { display:none; }
+  .nav-hamburger { display:flex; }
+
+  .hero { padding:2rem 1.25rem; }
+  .stats-strip { gap:1.5rem; padding:1.5rem 1rem; }
+  .stat-num { font-size:1.7rem; }
+  .section { padding:3rem 1.25rem; }
+  .features-grid { grid-template-columns:1fr; }
+
+  .dashboard { padding: calc(var(--nav-h) + 1.5rem) 1rem 1.5rem; }
+  .dash-grid { grid-template-columns:1fr; }
+  .metrics-row { grid-template-columns:1fr 1fr; }
+  .speedometers-row { grid-template-columns:1fr 1fr; }
+  .input-row { flex-direction:column; }
+  .input-row .input-group { min-width:unset; width:100%; }
+  .btn-submit { width:100%; text-align:center; }
+
+  .discover { padding: calc(var(--nav-h) + 1rem) 1rem 1.5rem; }
+  .quiz-card { padding:1.5rem; }
+
+  .community { padding: calc(var(--nav-h) + 1rem) 1rem 1.5rem; }
+  .post-form > div[style*="grid-template-columns:1fr 1fr"] { grid-template-columns:1fr !important; }
+  .community > div > div[style*="grid-template-columns:2fr 1fr"] { grid-template-columns:1fr !important; }
+
+  .aplm { padding: calc(var(--nav-h) + 1rem) 1rem 1.5rem; }
+  .aplm-hero { padding:1.5rem; }
+  .aplm-pillars { grid-template-columns:1fr; }
+
+  .about { padding: calc(var(--nav-h) + 1rem) 1rem 1.5rem; }
+  .founder-card { grid-template-columns:1fr; text-align:center; padding:1.5rem; gap:1.5rem; }
+  .founder-tags { justify-content:center; }
+  .about div[style*="grid-template-columns:1fr 1fr"] { grid-template-columns:1fr !important; }
+
+  /* Home convener section */
+  div[style*="grid-template-columns:1fr auto"] { grid-template-columns:1fr !important; }
+  div[style*="grid-template-columns:1fr auto"] > div:last-child { display:none; }
+
+  .toast { left:1rem; right:1rem; bottom:1rem; min-width:unset; }
+}
+@media(max-width:480px) {
+  .metrics-row { grid-template-columns:1fr; }
+  .speedometers-row { grid-template-columns:1fr 1fr; }
+  .hero-title { font-size:2rem; }
+  .radar-wrap { max-width:260px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo" onclick="showPage('home')">TalentVerse</div>
+  <div class="nav-links">
+    <button class="nav-btn active" id="nav-home" onclick="showPage('home')">Home</button>
+    <button class="nav-btn" id="nav-dashboard" onclick="showPage('dashboard')">Dashboard</button>
+    <button class="nav-btn" id="nav-discover" onclick="showPage('discover')">Discover</button>
+    <button class="nav-btn" id="nav-community" onclick="showPage('community')">Community</button>
+    <button class="nav-btn" id="nav-aplm" onclick="showPage('aplm')">APLM</button>
+    <button class="nav-btn" id="nav-about" onclick="showPage('about')">About</button>
+  </div>
+  <div style="display:flex;align-items:center;gap:0.5rem;">
+    <button class="nav-aplm" onclick="showPage('aplm')" id="nav-aplm-cta">✦ AI Mentor</button>
+    <button class="nav-hamburger" id="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobile-menu">
+  <button class="nav-btn active" id="mnav-home" onclick="showPage('home');closeMobileMenu()">🏠 Home</button>
+  <button class="nav-btn" onclick="showPage('dashboard');closeMobileMenu()">📊 Dashboard</button>
+  <button class="nav-btn" onclick="showPage('discover');closeMobileMenu()">🔮 Discover</button>
+  <button class="nav-btn" onclick="showPage('community');closeMobileMenu()">🌍 Community</button>
+  <button class="nav-btn" onclick="showPage('aplm');closeMobileMenu()">🤖 APLM</button>
+  <button class="nav-btn" onclick="showPage('about');closeMobileMenu()">👤 About</button>
+  <button class="nav-aplm" onclick="showPage('aplm');closeMobileMenu()">✦ AI Mentor</button>
+</div>
+
+<!-- SETTINGS MODAL REMOVED — see sheets-integration.html -->
+<div class="settings-overlay" id="settings-overlay" onclick="if(event.target===this)closeSettings()" style="display:none!important">
+  <div class="settings-modal">
+    <div class="settings-title">⚙️ Google Sheets Connection</div>
+    <p class="settings-desc">Connect your Google Sheet to capture dashboard submissions in real time. Paste your Web App URL below.</p>
+
+    <div class="settings-instructions">
+      <strong>Step 1 —</strong> Open your Google Sheet → <strong>Extensions → Apps Script</strong><br>
+      <strong>Step 2 —</strong> Delete any existing code, paste the script below, then click <strong>Save (Ctrl+S)</strong><br>
+      <strong>Step 3 —</strong> Click <strong>Deploy → New deployment → Web App</strong><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• Execute as: <strong>Me</strong> &nbsp;|&nbsp; Who has access: <strong>Anyone</strong><br>
+      <strong>Step 4 —</strong> Click <strong>Deploy</strong>, authorise when prompted, copy the Web App URL and paste it below
+    </div>
+
+    <div style="position:relative;margin-bottom:1.5rem;">
+      <pre id="appsscript-code" style="background:var(--tv-surface2);border:1px solid var(--tv-border);border-radius:10px;padding:1rem 1rem 1rem 1rem;font-family:var(--font-mono);font-size:0.75rem;color:#a0e0b0;overflow-x:auto;white-space:pre;line-height:1.7;margin:0;">// TalentVerse — Google Sheets Web App Script
+// Paste this entire file into Apps Script, then deploy as a Web App
+
+function doPost(e) {
+  try {
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+
+    // Add headers on first run
+    if (sheet.getLastRow() === 0) {
+      sheet.appendRow([
+        "Timestamp", "Name", "Talent Area",
+        "Hours Learned", "Problems Contributed", "Confidence Score"
+      ]);
+      sheet.getRange(1, 1, 1, 6).setFontWeight("bold")
+           .setBackground("#7C5CFC").setFontColor("#FFFFFF");
+    }
+
+    var data = JSON.parse(e.postData.contents);
+    sheet.appendRow([
+      data.timestamp  || new Date().toISOString(),
+      data.name       || "",
+      data.talent     || "",
+      data.hours      || 0,
+      data.problems_contributed || 0,
+      data.confidence || 0
+    ]);
+
+    return ContentService
+      .createTextOutput(JSON.stringify({ status: "ok" }))
+      .setMimeType(ContentService.MimeType.JSON);
+
+  } catch (err) {
+    return ContentService
+      .createTextOutput(JSON.stringify({ status: "error", message: err.message }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+// Optional: GET handler so you can test the URL in a browser
+function doGet() {
+  return ContentService
+    .createTextOutput("TalentVerse sheet is connected ✅")
+    .setMimeType(ContentService.MimeType.TEXT);
+}</pre>
+      <button onclick="copyScript()" id="copy-btn" style="position:absolute;top:0.6rem;right:0.6rem;background:rgba(124,92,252,0.2);border:1px solid rgba(124,92,252,0.4);color:var(--tv-purple);border-radius:6px;padding:0.3rem 0.75rem;font-size:0.75rem;font-family:var(--font-body);cursor:pointer;transition:all 0.2s;">📋 Copy</button>
+    </div>
+
+    <label class="settings-label">Google Sheets Web App URL</label>
+    <input type="url" class="tv-input" id="sheets-url-input" placeholder="https://script.google.com/macros/s/.../exec" style="width:100%;margin-bottom:0.75rem;">
+
+    <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+      <button class="btn-submit" onclick="saveSheetUrl()" style="flex:1;">Save URL ✦</button>
+      <button class="btn-ghost" onclick="testSheetUrl()" style="padding:0.65rem 1.25rem;font-size:0.85rem;">Test Connection</button>
+      <button class="btn-ghost" onclick="closeSettings()" style="padding:0.65rem 1.25rem;font-size:0.85rem;">Cancel</button>
+    </div>
+    <div class="settings-status" id="settings-status"></div>
+  </div>
+</div>
+
+<!-- ===== HOME PAGE ===== -->
+<div id="page-home" class="page active">
+  <section class="hero">
+    <div class="hero-orbs">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+    </div>
+    <div class="hero-badge">TalentVerse APLM System</div>
+    <h1 class="hero-title">
+      Discover Your Genius.<br>
+      <span>Change the World.</span>
+    </h1>
+    <p class="hero-sub">An AI + Peer Learning Mastery community where teens unlock their talents, collaborate on real solutions, and build a purpose-driven future together.</p>
+    <div class="hero-cta">
+      <button class="btn-primary" onclick="showPage('discover')">Discover My Talent 🔮</button>
+      <button class="btn-ghost" onclick="showPage('community')">Explore Community</button>
+    </div>
+  </section>
+
+  <div class="stats-strip">
+    <div class="stat-item">
+      <div class="stat-num purple" id="live-teens">1,247</div>
+      <div class="stat-label">Active Teens</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num pink" id="live-solutions">389</div>
+      <div class="stat-label">Solutions Built</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num teal" id="live-talents">24</div>
+      <div class="stat-label">Talent Categories</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num purple" id="live-cities">18</div>
+      <div class="stat-label">Cities Reached</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Why TalentVerse?</div>
+    <h2 class="section-title">Built for teens who dare to think differently</h2>
+    <p class="section-sub">The APLM System combines cutting-edge AI with the power of peer collaboration — so every teen can reach their fullest potential.</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon icon-purple">🤖</div>
+        <div class="feature-title">AI-Powered Mentorship</div>
+        <div class="feature-desc">Your personal AI mentor learns your style and gives you customized guidance, challenges, and feedback 24/7.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon icon-pink">🎯</div>
+        <div class="feature-title">Talent Discovery</div>
+        <div class="feature-desc">Take our signature APLM assessment to uncover your core talents, learning style, and greatest strengths.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon icon-teal">🌍</div>
+        <div class="feature-title">Solve Real Problems</div>
+        <div class="feature-desc">Join teen squads tackling real societal challenges — from climate to education, health to technology.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon icon-amber">⚡</div>
+        <div class="feature-title">Peer Learning Mastery</div>
+        <div class="feature-desc">Learn better, faster, and deeper through peer sessions, group projects, and collaborative challenges.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon icon-purple">📊</div>
+        <div class="feature-title">Live Progress Tracking</div>
+        <div class="feature-desc">Real-time dashboards, speedometers, and 3D charts show your growth every single day — visually and vividly.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon icon-teal">🏆</div>
+        <div class="feature-title">Community Rankings</div>
+        <div class="feature-desc">Earn impact points, climb the leaderboard, and get recognized for your contributions to society.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Convener Section -->
+  <div style="background:var(--tv-surface);border-top:1px solid var(--tv-border);border-bottom:1px solid var(--tv-border);padding:4rem 2rem;">
+    <div style="max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr auto;gap:3rem;align-items:center;">
+      <div>
+        <div class="section-label">Message from the Convener</div>
+        <h2 style="font-family:var(--font-head);font-size:1.7rem;font-weight:700;margin-bottom:1rem;">"Every teen is a genius waiting to be discovered."</h2>
+        <p style="color:var(--tv-muted);line-height:1.85;margin-bottom:1.25rem;">TalentVerse was born from a simple belief: that every young person carries within them the power to reshape the world. The APLM System is my gift to this generation — a bridge between raw potential and real impact.</p>
+        <p style="color:var(--tv-muted);font-size:0.9rem;">— <strong style="color:var(--tv-text);">Sarah-Praise Adebimpe Adejunmobi</strong>, Convener, TalentVerse</p>
+      </div>
+      <div style="text-align:center;flex-shrink:0;">
+        <div style="width:100px;height:100px;border-radius:50%;background:linear-gradient(135deg,var(--tv-purple),var(--tv-pink));display:flex;align-items:center;justify-content:center;font-size:2.5rem;font-weight:800;color:white;font-family:var(--font-head);margin:0 auto 0.75rem;">SP</div>
+        <div style="font-size:0.8rem;color:var(--tv-muted);">Visionary. Innovator. Educator.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== DASHBOARD PAGE ===== -->
+<div id="page-dashboard" class="page">
+  <div class="dashboard">
+    <div class="dash-header">
+      <h1 class="dash-title">📊 Live Impact Dashboard</h1>
+      <p class="dash-sub">Real-time data fed by the TalentVerse community. Submit your data to see it appear live!</p>
+    </div>
+
+    <!-- Data Input Form -->
+    <div class="dash-card" style="margin-bottom:2rem;">
+      <div class="dash-card-title">Submit Your Progress</div>
+      <div class="input-row">
+        <div class="input-group">
+          <label>Your Name</label>
+          <input type="text" class="tv-input" id="input-name" placeholder="e.g. Amira O.">
+        </div>
+        <div class="input-group">
+          <label>Talent Area</label>
+          <select class="tv-input" id="input-talent">
+            <option value="">Select talent...</option>
+            <option>Tech &amp; Innovation</option>
+            <option>Arts &amp; Creativity</option>
+            <option>Leadership</option>
+            <option>Science</option>
+            <option>Communication</option>
+            <option>Business</option>
+            <option>Sports &amp; Wellness</option>
+            <option>Social Impact</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>Hours Learned This Week</label>
+          <input type="number" class="tv-input" id="input-hours" placeholder="e.g. 5" min="0" max="50">
+        </div>
+        <div class="input-group">
+          <label>Problems Contributed To</label>
+          <input type="number" class="tv-input" id="input-problems" placeholder="e.g. 2" min="0" max="20">
+        </div>
+        <div class="input-group">
+          <label>Confidence (0–100)</label>
+          <input type="range" class="tv-input" id="input-confidence" min="0" max="100" value="70" style="padding:0.5rem 0;">
+        </div>
+        <button class="btn-submit" onclick="submitDashboard()">Submit ✦</button>
+      </div>
+    </div>
+
+    <!-- Speedometers -->
+    <div class="speedometers-row">
+      <div class="speedo-wrap">
+        <div class="speedo-title">Community Energy</div>
+        <canvas class="speedo" id="speedo-energy" width="180" height="110"></canvas>
+        <div class="speedo-val" id="speedo-energy-val" style="color:var(--tv-purple)">74%</div>
+        <div class="speedo-sub">avg engagement level</div>
+      </div>
+      <div class="speedo-wrap">
+        <div class="speedo-title">Learning Velocity</div>
+        <canvas class="speedo" id="speedo-velocity" width="180" height="110"></canvas>
+        <div class="speedo-val" id="speedo-velocity-val" style="color:var(--tv-teal)">6.2h</div>
+        <div class="speedo-sub">avg hours/week</div>
+      </div>
+      <div class="speedo-wrap">
+        <div class="speedo-title">Impact Score</div>
+        <canvas class="speedo" id="speedo-impact" width="180" height="110"></canvas>
+        <div class="speedo-val" id="speedo-impact-val" style="color:var(--tv-pink)">83%</div>
+        <div class="speedo-sub">societal contributions</div>
+      </div>
+      <div class="speedo-wrap">
+        <div class="speedo-title">Confidence Index</div>
+        <canvas class="speedo" id="speedo-conf" width="180" height="110"></canvas>
+        <div class="speedo-val" id="speedo-conf-val" style="color:var(--tv-amber)">71%</div>
+        <div class="speedo-sub">community avg confidence</div>
+      </div>
+    </div>
+
+    <!-- Metrics -->
+    <div class="metrics-row">
+      <div class="metric-card m-purple">
+        <div class="metric-label">Total Members</div>
+        <div class="metric-val" id="met-members">1,247</div>
+        <div class="metric-change up" id="met-members-ch">↑ +34 this week</div>
+      </div>
+      <div class="metric-card m-teal">
+        <div class="metric-label">Hours Learned</div>
+        <div class="metric-val" id="met-hours">7,832h</div>
+        <div class="metric-change up" id="met-hours-ch">↑ +412h this week</div>
+      </div>
+      <div class="metric-card m-pink">
+        <div class="metric-label">Problems Solved</div>
+        <div class="metric-val" id="met-problems">389</div>
+        <div class="metric-change up" id="met-problems-ch">↑ +12 this week</div>
+      </div>
+      <div class="metric-card m-amber">
+        <div class="metric-label">Active Squads</div>
+        <div class="metric-val" id="met-squads">63</div>
+        <div class="metric-change up">↑ +5 this week</div>
+      </div>
+      <div class="metric-card m-green">
+        <div class="metric-label">Cities Reached</div>
+        <div class="metric-val" id="met-cities">18</div>
+        <div class="metric-change up">↑ +2 new cities</div>
+      </div>
+    </div>
+
+    <!-- Charts row -->
+    <div class="dash-grid">
+      <div class="dash-card">
+        <div class="dash-card-title">Talent Distribution</div>
+        <div style="position:relative;height:280px;"><canvas id="chart-talent" role="img" aria-label="Donut chart of talent areas">Talent distribution chart.</canvas></div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-card-title">Weekly Learning Hours</div>
+        <div style="position:relative;height:280px;"><canvas id="chart-weekly" role="img" aria-label="Bar chart of weekly learning hours">Weekly learning hours chart.</canvas></div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-card-title">Problem Categories Tackled</div>
+        <div style="position:relative;height:280px;"><canvas id="chart-problems" role="img" aria-label="Bar chart of problem categories">Problem categories chart.</canvas></div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-card-title">Community Growth (30 days)</div>
+        <div style="position:relative;height:280px;"><canvas id="chart-growth" role="img" aria-label="Line chart of community growth">Community growth chart.</canvas></div>
+      </div>
+    </div>
+
+    <!-- Live feed -->
+    <div class="dash-card">
+      <div class="dash-card-title">Live Activity Feed</div>
+      <div id="activity-feed" style="display:flex;flex-direction:column;gap:0.75rem;max-height:300px;overflow-y:auto;">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== DISCOVER PAGE ===== -->
+<div id="page-discover" class="page">
+  <div class="discover">
+    <div style="text-align:center;margin-bottom:3rem;">
+      <div class="section-label">APLM Talent Discovery</div>
+      <h1 style="font-family:var(--font-head);font-size:clamp(2rem,4vw,3rem);font-weight:800;margin-bottom:0.75rem;">What's Your Superpower?</h1>
+      <p style="color:var(--tv-muted);max-width:500px;margin:0 auto;line-height:1.7;">Answer 8 quick questions and our AI will reveal your top talent areas, learning style, and recommended paths.</p>
+    </div>
+
+    <div class="quiz-card" id="quiz-container">
+      <div class="quiz-progress"><div class="quiz-progress-fill" id="quiz-progress" style="width:12.5%"></div></div>
+      <div id="quiz-qnum" style="font-size:0.8rem;color:var(--tv-muted);margin-bottom:0.5rem;">Question 1 of 8</div>
+      <div class="quiz-q" id="quiz-question">When you're faced with a difficult problem, what do you most naturally do first?</div>
+      <div class="quiz-options" id="quiz-options"></div>
+      <div class="quiz-nav">
+        <button class="btn-ghost" id="btn-prev" onclick="quizPrev()" style="padding:0.6rem 1.5rem;font-size:0.9rem;">← Back</button>
+        <button class="btn-primary" id="btn-next" onclick="quizNext()" style="padding:0.6rem 1.75rem;font-size:0.9rem;">Next →</button>
+      </div>
+    </div>
+
+    <div class="talent-result" id="talent-result">
+      <div class="result-emoji" id="res-emoji">🚀</div>
+      <h2 class="result-title" id="res-title">The Visionary Innovator</h2>
+      <p class="result-desc" id="res-desc">Your mind sees possibilities others miss. You thrive at the intersection of creativity and logic — building solutions before others even see the problem.</p>
+      <div class="talent-tags" id="res-tags"></div>
+      <div class="radar-wrap">
+        <canvas id="radar-chart" width="300" height="300" role="img" aria-label="Talent radar chart showing your strength areas">Talent radar chart.</canvas>
+      </div>
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+        <button class="btn-primary" onclick="showPage('aplm')">Start My APLM Journey →</button>
+        <button class="btn-ghost" onclick="showPage('community')">Join a Problem Squad</button>
+        <button class="btn-ghost" onclick="retakeQuiz()">Retake Quiz</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== COMMUNITY PAGE ===== -->
+<div id="page-community" class="page">
+  <div class="community">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;margin-bottom:2rem;">
+      <div>
+        <div class="section-label">Teen Problem Squads</div>
+        <h1 style="font-family:var(--font-head);font-size:clamp(1.8rem,3vw,2.5rem);font-weight:800;">Solve. Collaborate. Impact.</h1>
+        <p style="color:var(--tv-muted);margin-top:0.5rem;">Join a squad tackling real-world problems. Every idea counts.</p>
+      </div>
+    </div>
+
+    <!-- Filter chips -->
+    <div class="chip-row" id="filter-chips">
+      <button class="chip active" onclick="filterProblems('all',this)">All Problems</button>
+      <button class="chip" onclick="filterProblems('edu',this)">🎓 Education</button>
+      <button class="chip" onclick="filterProblems('env',this)">🌿 Environment</button>
+      <button class="chip" onclick="filterProblems('health',this)">❤️ Health</button>
+      <button class="chip" onclick="filterProblems('tech',this)">💻 Technology</button>
+    </div>
+
+    <!-- Post new problem -->
+    <div class="post-form">
+      <div class="post-form-title">+ Submit a Problem for the Community</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+        <input type="text" class="tv-input" id="post-title" placeholder="Problem title...">
+        <select class="tv-input" id="post-category">
+          <option value="">Select category...</option>
+          <option value="edu">Education</option>
+          <option value="env">Environment</option>
+          <option value="health">Health</option>
+          <option value="tech">Technology</option>
+        </select>
+      </div>
+      <textarea class="tv-textarea" id="post-desc" rows="3" placeholder="Describe the problem and why it matters..."></textarea>
+      <div style="display:flex;justify-content:flex-end;margin-top:1rem;">
+        <button class="btn-submit" onclick="submitProblem()">Submit Problem ✦</button>
+      </div>
+    </div>
+
+    <!-- Problems grid + leaderboard -->
+    <div style="display:grid;grid-template-columns:2fr 1fr;gap:1.5rem;align-items:start;">
+      <div>
+        <div class="problems-grid" id="problems-grid" style="grid-template-columns:1fr 1fr;"></div>
+      </div>
+      <div>
+        <div class="leaderboard">
+          <div class="dash-card-title">🏆 Impact Leaderboard</div>
+          <div id="leaderboard-list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== APLM PAGE ===== -->
+<div id="page-aplm" class="page">
+  <div class="aplm">
+    <div class="aplm-hero">
+      <div style="display:inline-flex;align-items:center;gap:0.5rem;background:rgba(124,92,252,0.15);border:1px solid rgba(124,92,252,0.3);border-radius:50px;padding:0.4rem 1.2rem;font-size:0.8rem;color:var(--tv-purple);font-weight:600;margin-bottom:1.25rem;letter-spacing:0.05em;text-transform:uppercase;">✦ The APLM System</div>
+      <h1 class="aplm-title"><span>AI + Peer Learning</span> Mastery</h1>
+      <p class="aplm-desc">Created by Sarah-Praise Adebimpe Adejunmobi, the APLM System is a transformative learning framework that fuses the intelligence of AI with the warmth and power of peer collaboration — creating a learning experience that is deeply personal, wildly effective, and genuinely fun.</p>
+      <div class="aplm-pillars">
+        <div class="pillar">
+          <div class="pillar-icon">🤖</div>
+          <div class="pillar-name">AI Personalization</div>
+          <div class="pillar-desc">Your AI mentor learns your style, pace, and goals — then crafts a learning path just for you.</div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-icon">🤝</div>
+          <div class="pillar-name">Peer Learning</div>
+          <div class="pillar-desc">Teens teach teens. The best way to master something is to explain it to someone else.</div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-icon">🎯</div>
+          <div class="pillar-name">Mastery Tracking</div>
+          <div class="pillar-desc">Real-time progress tracking with visual feedback ensures you always know how far you've come.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Learning path -->
+    <div class="learning-path">
+      <div class="dash-card-title" style="margin-bottom:1.5rem;">Your APLM Journey: 5 Stages</div>
+      <div class="path-steps">
+        <div class="path-step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">🔍 Talent Discovery</div>
+            <div class="step-desc">Take the APLM assessment to uncover your natural strengths, learning style, and passion areas.</div>
+          </div>
+        </div>
+        <div class="path-step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">🗺️ Path Mapping</div>
+            <div class="step-desc">Your AI mentor maps a personalized learning journey based on your talents and your chosen societal problem.</div>
+          </div>
+        </div>
+        <div class="path-step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">⚡ Active Learning</div>
+            <div class="step-desc">Learn through challenges, peer sessions, projects, and AI-guided micro-lessons. No boring lectures here.</div>
+          </div>
+        </div>
+        <div class="path-step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <div class="step-title">🌍 Real-World Application</div>
+            <div class="step-desc">Apply your skills to real problems in your community. This is where learning meets impact.</div>
+          </div>
+        </div>
+        <div class="path-step">
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <div class="step-title">🏆 Mastery &amp; Mentorship</div>
+            <div class="step-desc">Achieve mastery and start mentoring other teens — paying your growth forward through the community.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Chat -->
+    <div class="ai-chat">
+      <div class="dash-card-title" style="margin-bottom:1.25rem;">🤖 AI Mentor — Ask Me Anything</div>
+      <div class="chat-messages" id="chat-messages">
+        <div class="chat-msg msg-ai">
+          <div class="chat-avatar av-ai">SP</div>
+          <div class="chat-bubble">Hey! 👋 I'm your APLM AI Mentor, created by Sarah-Praise. I'm here to help you discover your potential, plan your learning journey, and work through any challenge. What would you like to explore today?</div>
+        </div>
+      </div>
+      <div class="chat-typing" id="chat-typing">
+        <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+      </div>
+      <div class="chat-input-row">
+        <input type="text" class="tv-input chat-input" id="chat-input" placeholder="Ask your AI mentor anything..." onkeydown="if(event.key==='Enter')sendChat()">
+        <button class="btn-submit" onclick="sendChat()">Send →</button>
+      </div>
+      <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.75rem;">
+        <button class="chip" onclick="quickChat('What talent suits me?')">What talent suits me?</button>
+        <button class="chip" onclick="quickChat('How do I start my APLM journey?')">Start APLM journey</button>
+        <button class="chip" onclick="quickChat('Help me pick a problem to solve')">Pick a problem</button>
+        <button class="chip" onclick="quickChat('How can I improve my confidence?')">Build confidence</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ABOUT PAGE ===== -->
+<div id="page-about" class="page">
+  <div class="about">
+    <div class="founder-card">
+      <div class="founder-avatar">SP</div>
+      <div>
+        <h1 class="founder-name">Sarah-Praise Adebimpe Adejunmobi</h1>
+        <div class="founder-title">Convener, TalentVerse · Creator, APLM System</div>
+        <p class="founder-bio">Sarah-Praise is a visionary young leader, education innovator, and the Convener of TalentVerse. She is the creator of the APLM System (AI + Peer Learning Mastery), an innovative learning approach designed to transform education through technology, collaboration, and personalized development.</p>
+        <p class="founder-bio">With VEI as its first center, TalentVerse is focused on helping young people discover their talents, unlock their potential, and build a future driven by purpose and innovation. Sarah-Praise is passionate about youth empowerment, leadership, and using transformative ideas to create lasting impact in her generation.</p>
+        <div class="founder-tags">
+          <span class="founder-tag">Youth Empowerment</span>
+          <span class="founder-tag">Education Innovation</span>
+          <span class="founder-tag">AI in Learning</span>
+          <span class="founder-tag">Peer Learning</span>
+          <span class="founder-tag">Visionary Leadership</span>
+          <span class="founder-tag">TalentVerse Convener</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mission & Values -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem;">
+      <div class="dash-card">
+        <div class="dash-card-title">🌟 Our Mission</div>
+        <p style="color:var(--tv-muted);line-height:1.85;font-size:0.95rem;">To create a world where every teenager — regardless of background — has the tools, community, and guidance to discover their unique talents and use them to solve real problems that matter.</p>
+      </div>
+      <div class="dash-card">
+        <div class="dash-card-title">🔭 Our Vision</div>
+        <p style="color:var(--tv-muted);line-height:1.85;font-size:0.95rem;">A generation of teen innovators, problem-solvers, and changemakers — connected by technology, driven by purpose, and empowered by the APLM System to reshape their communities and their world.</p>
+      </div>
+      <div class="dash-card">
+        <div class="dash-card-title">🏛️ About VEI Center</div>
+        <p style="color:var(--tv-muted);line-height:1.85;font-size:0.95rem;">VEI (Visionary Education & Innovation) is the first TalentVerse center — a physical and digital space where teens come to discover, learn, collaborate, and create. The first of many centers to come.</p>
+      </div>
+      <div class="dash-card">
+        <div class="dash-card-title">⚡ Core Values</div>
+        <div style="display:flex;flex-direction:column;gap:0.5rem;">
+          <div style="display:flex;align-items:center;gap:0.75rem;font-size:0.9rem;"><span style="color:var(--tv-purple);">✦</span><span><strong>Authenticity</strong> — Be unapologetically yourself</span></div>
+          <div style="display:flex;align-items:center;gap:0.75rem;font-size:0.9rem;"><span style="color:var(--tv-pink);">✦</span><span><strong>Collaboration</strong> — We rise by lifting others</span></div>
+          <div style="display:flex;align-items:center;gap:0.75rem;font-size:0.9rem;"><span style="color:var(--tv-teal);">✦</span><span><strong>Innovation</strong> — Challenge every assumption</span></div>
+          <div style="display:flex;align-items:center;gap:0.75rem;font-size:0.9rem;"><span style="color:var(--tv-amber);">✦</span><span><strong>Impact</strong> — Learning must change the world</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dash-card" style="text-align:center;padding:3rem;">
+      <h2 style="font-family:var(--font-head);font-size:2rem;font-weight:800;margin-bottom:1rem;">Join the TalentVerse Revolution</h2>
+      <p style="color:var(--tv-muted);max-width:500px;margin:0 auto 2rem;line-height:1.7;">Ready to discover your talent, connect with purpose-driven peers, and start building solutions that matter?</p>
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+        <button class="btn-primary" onclick="showPage('discover')">Discover My Talent 🔮</button>
+        <button class="btn-ghost" onclick="showPage('aplm')">Meet My AI Mentor 🤖</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><div class="toast-msg" id="toast-msg"></div></div>
+
+<script>
+// ============ PAGE ROUTING ============
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  const btn = document.getElementById('nav-' + id);
+  if (btn) btn.classList.add('active');
+  window.scrollTo(0, 0);
+  if (id === 'dashboard') initDashboard();
+}
+
+// ============ TOAST ============
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+// ============ LIVE COUNTERS ============
+let communityData = {
+  members: 1247, hours: 7832, problems: 389, squads: 63, cities: 18,
+  energy: 74, velocity: 6.2, impact: 83, confidence: 71,
+  talentData: [320, 180, 245, 210, 170, 122],
+  weeklyHours: [5.2, 6.1, 7.0, 5.8, 6.5, 7.2, 6.8],
+  submissions: []
+};
+
+setInterval(() => {
+  communityData.members += Math.random() < 0.3 ? 1 : 0;
+  communityData.energy = Math.min(100, Math.max(50, communityData.energy + (Math.random()-0.5)*2));
+  communityData.impact = Math.min(100, Math.max(60, communityData.impact + (Math.random()-0.5)));
+  communityData.confidence = Math.min(100, Math.max(50, communityData.confidence + (Math.random()-0.5)*1.5));
+  document.getElementById('live-teens').textContent = communityData.members.toLocaleString();
+  document.getElementById('live-solutions').textContent = communityData.problems;
+  updateSpeedometers();
+}, 2500);
+
+// ============ SPEEDOMETERS ============
+function drawSpeedometer(canvasId, value, max, color) {
+  const c = document.getElementById(canvasId);
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  const W = c.width, H = c.height;
+  ctx.clearRect(0, 0, W, H);
+  const cx = W / 2, cy = H - 10;
+  const r = Math.min(W, H * 1.5) * 0.42;
+  const startA = Math.PI, endA = 2 * Math.PI;
+  const pct = Math.max(0, Math.min(1, value / max));
+  const valA = startA + pct * Math.PI;
+  // Track
+  ctx.beginPath(); ctx.arc(cx, cy, r, startA, endA);
+  ctx.strokeStyle = 'rgba(255,255,255,0.08)'; ctx.lineWidth = 12; ctx.lineCap = 'round';
+  ctx.stroke();
+  // Fill
+  ctx.beginPath(); ctx.arc(cx, cy, r, startA, valA);
+  ctx.strokeStyle = color; ctx.lineWidth = 12; ctx.lineCap = 'round'; ctx.stroke();
+  // Tick marks
+  for (let i = 0; i <= 10; i++) {
+    const a = Math.PI + (i / 10) * Math.PI;
+    const x1 = cx + (r - 18) * Math.cos(a), y1 = cy + (r - 18) * Math.sin(a);
+    const x2 = cx + (r - 8) * Math.cos(a), y2 = cy + (r - 8) * Math.sin(a);
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2);
+    ctx.strokeStyle = i % 5 === 0 ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.1)';
+    ctx.lineWidth = i % 5 === 0 ? 2 : 1; ctx.stroke();
+  }
+  // Needle
+  const needleA = startA + pct * Math.PI;
+  ctx.save(); ctx.translate(cx, cy); ctx.rotate(needleA);
+  ctx.beginPath(); ctx.moveTo(-4, 0); ctx.lineTo(0, -(r - 22)); ctx.lineTo(4, 0);
+  ctx.fillStyle = color; ctx.fill();
+  ctx.restore();
+  ctx.beginPath(); ctx.arc(cx, cy, 8, 0, Math.PI * 2);
+  ctx.fillStyle = '#1A1A2E'; ctx.fill();
+  ctx.beginPath(); ctx.arc(cx, cy, 5, 0, Math.PI * 2);
+  ctx.fillStyle = color; ctx.fill();
+}
+
+function updateSpeedometers() {
+  drawSpeedometer('speedo-energy', communityData.energy, 100, '#7C5CFC');
+  drawSpeedometer('speedo-velocity', communityData.velocity, 20, '#00D9C0');
+  drawSpeedometer('speedo-impact', communityData.impact, 100, '#F45CA3');
+  drawSpeedometer('speedo-conf', communityData.confidence, 100, '#FFB830');
+  document.getElementById('speedo-energy-val').textContent = Math.round(communityData.energy) + '%';
+  document.getElementById('speedo-velocity-val').textContent = communityData.velocity.toFixed(1) + 'h';
+  document.getElementById('speedo-impact-val').textContent = Math.round(communityData.impact) + '%';
+  document.getElementById('speedo-conf-val').textContent = Math.round(communityData.confidence) + '%';
+}
+
+// ============ DASHBOARD INIT ============
+let dashInitialized = false;
+let talentChart, weeklyChart, problemChart, growthChart;
+
+function initDashboard() {
+  updateSpeedometers();
+  updateMetrics();
+  if (!dashInitialized) {
+    dashInitialized = true;
+    initCharts();
+    populateFeed();
+  }
+}
+
+function updateMetrics() {
+  document.getElementById('met-members').textContent = communityData.members.toLocaleString();
+  document.getElementById('met-hours').textContent = communityData.hours.toLocaleString() + 'h';
+  document.getElementById('met-problems').textContent = communityData.problems;
+}
+
+function initCharts() {
+  const darkBg = 'rgba(255,255,255,0.06)';
+  const gridColor = 'rgba(255,255,255,0.07)';
+  const textColor = '#8A87A5';
+  Chart.defaults.color = textColor;
+
+  // Talent Donut
+  talentChart = new Chart(document.getElementById('chart-talent'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Tech & Innovation','Arts','Leadership','Science','Communication','Business'],
+      datasets: [{ data: communityData.talentData,
+        backgroundColor: ['#7C5CFC','#F45CA3','#00D9C0','#FFB830','#4AE580','#FF6B6B'],
+        borderWidth: 0, hoverOffset: 8 }]
+    },
+    options: { responsive:true, maintainAspectRatio:false, cutout:'65%',
+      plugins: { legend: { display: true, position: 'right', labels: { boxWidth: 10, padding: 12, font: { size: 11 } } } } }
+  });
+
+  // Weekly hours bar
+  weeklyChart = new Chart(document.getElementById('chart-weekly'), {
+    type: 'bar',
+    data: {
+      labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+      datasets: [{ label: 'Avg hours', data: communityData.weeklyHours,
+        backgroundColor: communityData.weeklyHours.map((_,i) => i===5?'#7C5CFC':'rgba(124,92,252,0.4)'),
+        borderRadius: 6, borderSkipped: false }]
+    },
+    options: { responsive:true, maintainAspectRatio:false,
+      scales: { x: { grid:{color:gridColor}, ticks:{color:textColor} }, y: { grid:{color:gridColor}, ticks:{color:textColor} } },
+      plugins: { legend: { display: false } } }
+  });
+
+  // Problems chart
+  problemChart = new Chart(document.getElementById('chart-problems'), {
+    type: 'bar',
+    data: {
+      labels: ['Education','Environment','Health','Technology','Economy','Culture'],
+      datasets: [{ label: 'Problems', data: [82, 65, 71, 93, 44, 34],
+        backgroundColor: ['#00D9C0','#4AE580','#F45CA3','#7C5CFC','#FFB830','#FF6B6B'],
+        borderRadius: 6, borderSkipped: false }]
+    },
+    options: { responsive:true, maintainAspectRatio:false, indexAxis:'y',
+      scales: { x:{grid:{color:gridColor},ticks:{color:textColor}}, y:{grid:{color:gridColor},ticks:{color:textColor}} },
+      plugins:{ legend:{display:false} } }
+  });
+
+  // Growth line
+  const labels = [];
+  const growData = [];
+  for (let i = 29; i >= 0; i--) {
+    const d = new Date(); d.setDate(d.getDate() - i);
+    labels.push(d.getDate() + '/' + (d.getMonth()+1));
+    growData.push(Math.round(900 + (29-i) * 11.5 + Math.random()*15));
+  }
+  growthChart = new Chart(document.getElementById('chart-growth'), {
+    type: 'line',
+    data: {
+      labels, datasets: [{ label: 'Members', data: growData,
+        borderColor: '#7C5CFC', backgroundColor: 'rgba(124,92,252,0.08)',
+        fill: true, tension: 0.4, pointRadius: 0, pointHoverRadius: 5 }]
+    },
+    options: { responsive:true, maintainAspectRatio:false,
+      scales: { x:{grid:{color:gridColor},ticks:{color:textColor,maxTicksLimit:8}}, y:{grid:{color:gridColor},ticks:{color:textColor}} },
+      plugins:{legend:{display:false}} }
+  });
+}
+
+function submitDashboard() {
+  const name = document.getElementById('input-name').value.trim();
+  const talent = document.getElementById('input-talent').value;
+  const hours = parseFloat(document.getElementById('input-hours').value) || 0;
+  const problems = parseInt(document.getElementById('input-problems').value) || 0;
+  const confidence = parseInt(document.getElementById('input-confidence').value) || 70;
+  if (!name || !talent) { showToast('Please fill in at least your name and talent area!'); return; }
+
+  communityData.hours += hours;
+  communityData.problems += problems;
+  communityData.members += 1;
+  communityData.confidence = Math.round((communityData.confidence + confidence) / 2);
+  communityData.velocity = parseFloat(((communityData.velocity * 0.9) + (hours * 0.1)).toFixed(1));
+
+  const talentMap = {'Tech & Innovation':0,'Arts & Creativity':1,'Leadership':2,'Science':3,'Communication':4,'Business':5,'Sports & Wellness':4,'Social Impact':2};
+  const ti = talentMap[talent] ?? 0;
+  communityData.talentData[ti] += 1;
+
+  updateMetrics();
+  updateSpeedometers();
+  if (talentChart) { talentChart.data.datasets[0].data = communityData.talentData; talentChart.update(); }
+
+  addFeedItem(`${name} joined the ${talent} community with ${hours}h learned this week! 🔥`);
+  showToast(`✦ Welcome ${name}! Your data is now live on the dashboard!`);
+
+  // Send to Google Sheets if URL is configured
+  const sheetData = {
+    timestamp: new Date().toISOString(),
+    name, talent, hours, problems_contributed: problems, confidence
+  };
+  sendToSheets(sheetData).catch(() => {});
+  if (!sheetsWebAppUrl) showToast('💡 Tip: Connect a Google Sheet via the ⚙️ Sheets button to save data permanently!');
+
+  document.getElementById('input-name').value = '';
+  document.getElementById('input-hours').value = '';
+  document.getElementById('input-problems').value = '';
+  document.getElementById('input-confidence').value = 70;
+}
+
+const feedMessages = [
+  '🚀 Temi O. just completed Level 2 of the APLM journey!',
+  '💡 Kelechi A. proposed a new solution for food security in Lagos!',
+  '🎯 Squad "TechRoots" solved their first real-world problem!',
+  '⚡ 5 new teens joined TalentVerse from Abuja today!',
+  '🌍 Amara J. earned 250 impact points this week!',
+  '🔬 "Science Squad NG" published their first community research!',
+  '🎨 Zara M. unlocked the Creative Leader talent badge!',
+  '🤝 New peer learning session: "Build Your First App" starts Friday!'
+];
+
+function addFeedItem(msg) {
+  const feed = document.getElementById('activity-feed');
+  const div = document.createElement('div');
+  div.style.cssText = 'display:flex;align-items:center;gap:0.75rem;padding:0.75rem;background:rgba(124,92,252,0.07);border-radius:10px;font-size:0.88rem;border:1px solid rgba(124,92,252,0.15);animation:fadeIn 0.4s ease;';
+  div.innerHTML = `<span style="font-size:0.75rem;color:var(--tv-muted);white-space:nowrap;">${new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</span><span>${msg}</span>`;
+  feed.prepend(div);
+  if (feed.children.length > 20) feed.lastChild.remove();
+}
+
+function populateFeed() {
+  feedMessages.forEach((m, i) => setTimeout(() => addFeedItem(m), i * 800));
+  setInterval(() => {
+    addFeedItem(feedMessages[Math.floor(Math.random() * feedMessages.length)]);
+  }, 6000);
+}
+
+// ============ QUIZ ============
+const quizData = [
+  { q: "When you're faced with a difficult problem, what do you most naturally do first?", opts: ["Break it into smaller pieces and analyze","Sketch ideas or visualize solutions","Talk it through with others","Jump in and start experimenting"] },
+  { q: "Which school subject used to excite you most?", opts: ["Maths or Computer Science","Art, Music, or Drama","Social Studies or Debate","Biology, Physics, or Chemistry"] },
+  { q: "Your ideal Saturday afternoon would be:", opts: ["Building or coding something new","Creating something artistic","Organizing a community event","Exploring outdoors or researching"] },
+  { q: "When working in a group, you usually:", opts: ["Lead the strategy and planning","Come up with the creative concepts","Keep everyone motivated and connected","Gather facts and ensure accuracy"] },
+  { q: "What energizes you most?", opts: ["Solving a tricky logical puzzle","Expressing yourself creatively","Helping someone overcome a challenge","Discovering how things work"] },
+  { q: "Your ideal future looks like:", opts: ["Building tech that changes the world","Creating art or media that moves people","Leading a movement or community","Discovering a scientific breakthrough"] },
+  { q: "When you learn something new, you prefer:", opts: ["Structured step-by-step guides","Experimenting and exploring freely","Learning from others' experiences","Reading and researching deeply"] },
+  { q: "Your friends would describe you as:", opts: ["The smart problem-solver","The creative one","The social butterfly who connects everyone","The curious one always asking 'why'"] }
+];
+
+const talentProfiles = [
+  { type: "The Visionary Innovator", emoji: "🚀", desc: "Your mind sees possibilities others miss. You thrive at the intersection of creativity and logic — building solutions before others even see the problem. Tech, entrepreneurship, and social innovation are your playgrounds.", tags: ["Tech Leader","Entrepreneur","Systems Thinker","Future Builder"], scores: [9,6,7,8,8,7] },
+  { type: "The Creative Genius", emoji: "🎨", desc: "You see the world as a canvas and every challenge as an opportunity to create something beautiful and meaningful. Your art, music, writing, or design has the power to move people and change minds.", tags: ["Creative Director","Artist","Storyteller","Design Thinker"], scores: [6,9,7,6,9,8] },
+  { type: "The Community Catalyst", emoji: "🌟", desc: "You are a born connector and leader. Your superpower is bringing people together, inspiring action, and building movements that matter. You turn individual talents into collective impact.", tags: ["Social Entrepreneur","Youth Leader","Community Builder","Change Maker"], scores: [7,7,9,6,7,9] },
+  { type: "The Scientific Explorer", emoji: "🔬", desc: "Curiosity drives everything you do. You want to understand how the world works at a deep level — and then use that knowledge to solve some of its most pressing problems.", tags: ["Research Innovator","Problem Solver","Critical Thinker","Data Analyst"], scores: [8,6,6,9,8,7] }
+];
+
+let currentQ = 0, quizAnswers = [];
+
+function renderQuiz() {
+  const qd = quizData[currentQ];
+  document.getElementById('quiz-question').textContent = qd.q;
+  document.getElementById('quiz-qnum').textContent = `Question ${currentQ + 1} of ${quizData.length}`;
+  document.getElementById('quiz-progress').style.width = ((currentQ + 1) / quizData.length * 100) + '%';
+  const opts = document.getElementById('quiz-options');
+  opts.innerHTML = '';
+  qd.opts.forEach((o, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-option' + (quizAnswers[currentQ] === i ? ' selected' : '');
+    btn.textContent = o;
+    btn.onclick = () => { quizAnswers[currentQ] = i; renderQuiz(); };
+    opts.appendChild(btn);
+  });
+  document.getElementById('btn-prev').style.opacity = currentQ === 0 ? '0.3' : '1';
+  document.getElementById('btn-next').textContent = currentQ === quizData.length - 1 ? 'See My Talent ✨' : 'Next →';
+}
+
+function quizNext() {
+  if (quizAnswers[currentQ] === undefined) { showToast('Pick an option first! 😊'); return; }
+  if (currentQ < quizData.length - 1) { currentQ++; renderQuiz(); }
+  else showResult();
+}
+function quizPrev() { if (currentQ > 0) { currentQ--; renderQuiz(); } }
+
+function showResult() {
+  const counts = [0,0,0,0];
+  quizAnswers.forEach(a => counts[a % 4]++);
+  const maxIdx = counts.indexOf(Math.max(...counts));
+  const profile = talentProfiles[maxIdx];
+
+  document.getElementById('quiz-container').style.display = 'none';
+  const res = document.getElementById('talent-result');
+  res.classList.add('show');
+  document.getElementById('res-emoji').textContent = profile.emoji;
+  document.getElementById('res-title').textContent = profile.type;
+  document.getElementById('res-desc').textContent = profile.desc;
+  const tags = document.getElementById('res-tags');
+  tags.innerHTML = profile.tags.map(t => `<span class="talent-tag">${t}</span>`).join('');
+
+  // Radar chart
+  new Chart(document.getElementById('radar-chart'), {
+    type: 'radar',
+    data: {
+      labels: ['Logic','Creativity','Leadership','Science','Expression','Impact'],
+      datasets: [{ label: 'Your Profile', data: profile.scores,
+        borderColor: '#7C5CFC', backgroundColor: 'rgba(124,92,252,0.2)',
+        pointBackgroundColor: '#7C5CFC', pointBorderColor: '#fff', pointHoverBackgroundColor: '#fff', borderWidth: 2 }]
+    },
+    options: { responsive:true, maintainAspectRatio:false,
+      scales: { r: { beginAtZero:true, max:10, grid:{color:'rgba(255,255,255,0.08)'}, pointLabels:{color:'#8A87A5',font:{size:11}}, ticks:{display:false} } },
+      plugins: { legend:{display:false} } }
+  });
+}
+
+function retakeQuiz() {
+  currentQ = 0; quizAnswers = [];
+  document.getElementById('talent-result').classList.remove('show');
+  document.getElementById('quiz-container').style.display = 'block';
+  renderQuiz();
+}
+
+renderQuiz();
+
+// ============ COMMUNITY ============
+let allProblems = [
+  { id:1, title:"Flood Early Warning Systems for Lagos Slums", cat:"tech", tag:"tag-tech", label:"💻 Technology", desc:"Teens designing SMS-based flood alerts for underserved communities using affordable IoT sensors.", members:12, ideas:28, likes:47 },
+  { id:2, title:"Free Coding Bootcamps in Public Schools", cat:"edu", tag:"tag-edu", label:"🎓 Education", desc:"A peer-run initiative bringing basic programming skills to government school students across Nigeria.", members:19, ideas:41, likes:63 },
+  { id:3, title:"Youth Mental Health Peer Support Network", cat:"health", tag:"tag-health", label:"❤️ Health", desc:"Teen-to-teen mental health support circles, training youth counselors to help their classmates.", members:14, ideas:22, likes:55 },
+  { id:4, title:"Community Waste-to-Wealth Program", cat:"env", tag:"tag-env", label:"🌿 Environment", desc:"Turning neighborhood plastic waste into building materials and generating income for local youth.", members:9, ideas:17, likes:38 }
+];
+
+function renderProblems(filter) {
+  const grid = document.getElementById('problems-grid');
+  grid.innerHTML = '';
+  const filtered = filter === 'all' ? allProblems : allProblems.filter(p => p.cat === filter);
+  filtered.forEach(p => {
+    grid.innerHTML += `<div class="problem-card" data-id="${p.id}">
+      <span class="problem-tag ${p.tag}">${p.label}</span>
+      <div class="problem-title">${p.title}</div>
+      <div class="problem-desc">${p.desc}</div>
+      <div class="problem-meta">
+        <span>👥 ${p.members} members</span>
+        <span>💡 ${p.ideas} ideas</span>
+        <span>❤️ ${p.likes}</span>
+      </div>
+    </div>`;
+  });
+}
+
+function filterProblems(filter, el) {
+  document.querySelectorAll('#filter-chips .chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  renderProblems(filter);
+}
+
+function submitProblem() {
+  const title = document.getElementById('post-title').value.trim();
+  const cat = document.getElementById('post-category').value;
+  const desc = document.getElementById('post-desc').value.trim();
+  if (!title || !cat || !desc) { showToast('Please fill all fields! 📝'); return; }
+  const tagMap = {edu:'tag-edu',env:'tag-env',health:'tag-health',tech:'tag-tech'};
+  const labelMap = {edu:'🎓 Education',env:'🌿 Environment',health:'❤️ Health',tech:'💻 Technology'};
+  allProblems.unshift({ id: Date.now(), title, cat, tag: tagMap[cat], label: labelMap[cat], desc, members: 1, ideas: 0, likes: 0 });
+  renderProblems('all');
+  document.getElementById('post-title').value = '';
+  document.getElementById('post-desc').value = '';
+  document.getElementById('post-category').value = '';
+  showToast('🌍 Your problem is live! Teens are seeing it now!');
+}
+
+const leaderboardData = [
+  { name: 'Temi Okonkwo', pts: 2840, avatar: 'TO', color: '#7C5CFC' },
+  { name: 'Kelechi Adaeze', pts: 2615, avatar: 'KA', color: '#F45CA3' },
+  { name: 'Yusuf Salihu', pts: 2430, avatar: 'YS', color: '#00D9C0' },
+  { name: 'Fatima Bashir', pts: 2210, avatar: 'FB', color: '#FFB830' },
+  { name: 'Emeka Obi', pts: 1990, avatar: 'EO', color: '#4AE580' },
+];
+
+function renderLeaderboard() {
+  const rankClass = ['gold','silver','bronze','',''];
+  document.getElementById('leaderboard-list').innerHTML = leaderboardData.map((l,i) =>
+    `<div class="lb-row">
+      <div class="lb-rank ${rankClass[i]}">#${i+1}</div>
+      <div class="lb-avatar" style="background:${l.color}22;color:${l.color};">${l.avatar}</div>
+      <div class="lb-name">${l.name}</div>
+      <div class="lb-pts">${l.pts.toLocaleString()} pts</div>
+    </div>`
+  ).join('');
+}
+
+renderProblems('all');
+renderLeaderboard();
+
+// ============ MOBILE MENU ============
+function toggleMobileMenu() {
+  document.getElementById('mobile-menu').classList.toggle('open');
+}
+function closeMobileMenu() {
+  document.getElementById('mobile-menu').classList.remove('open');
+}
+
+// ============ AI CHAT ============
+const aiResponses = {
+  talent: ["Based on your energy and how you're engaging, I sense strong creative and leadership potential in you! Take the Talent Discovery Quiz on the Discover page — it only takes 2 minutes and gives you a full radar of your strengths. 🎯", "Every teen has a unique genius. Your curiosity in asking this question already tells me a lot! I'd love to guide you through our 8-question APLM assessment. Want to go to the Discover page now?"],
+  aplm: ["The APLM System is Sarah-Praise's gift to this generation! It works in 5 stages: Discover → Map → Learn → Apply → Master. The key insight is that AI can personalize your learning AND peer collaboration makes it stick. You're already in stage 1 by being here! 🚀", "APLM stands for AI + Peer Learning Mastery. The 'mastery' part is key — it means you're not just learning facts, you're building real skills you can apply to solve real problems. Want me to map out a personalized path for you?"],
+  problem: ["Great question! The best problems to work on are ones close to YOUR experience. What do you see around you every day that frustrates you? Turn that frustration into fuel! Our community is currently working on education, environment, health, and tech challenges. 🌍", "Here's how I'd think about it: What do you care about deeply? Climate? Education access? Mental health? Start there. Then find a squad on the Community page who's already working on it — you'll contribute faster than you think!"],
+  confidence: ["Confidence is a skill, not a personality trait — and that means YOU can build it! Start small: share one idea in a community thread this week. Teach one concept to a peer. Each small act of courage compounds. You've got this! ⚡", "Here's a secret: most confident teens felt the EXACT same doubts you feel. The difference is they acted anyway. The APLM community is a judgment-free zone — everyone here is figuring it out together. Take your next small step today!"],
+  default: ["That's a really thoughtful question! As your APLM mentor, I'm here to help you unlock your full potential. Could you tell me a bit more about what you're working on or what you want to achieve? The more context you give me, the more personalized my guidance can be! 💫", "I love your curiosity — that's literally one of the most important traits for success! Let me think about this with you. What outcome would feel like a win for you in the next 30 days? Let's reverse-engineer that together.", "Great topic! In the APLM framework, we always connect learning to impact. How does this relate to a problem you want to solve in your community or the world? Once we anchor it to purpose, everything becomes clearer and more motivating! 🌟"]
+};
+
+function getAIResponse(msg) {
+  const low = msg.toLowerCase();
+  if (low.includes('talent') || low.includes('strength') || low.includes('good at')) return aiResponses.talent[Math.floor(Math.random()*2)];
+  if (low.includes('aplm') || low.includes('journey') || low.includes('start') || low.includes('system')) return aiResponses.aplm[Math.floor(Math.random()*2)];
+  if (low.includes('problem') || low.includes('solve') || low.includes('pick') || low.includes('challenge')) return aiResponses.problem[Math.floor(Math.random()*2)];
+  if (low.includes('confident') || low.includes('confidence') || low.includes('afraid') || low.includes('scared')) return aiResponses.confidence[Math.floor(Math.random()*2)];
+  return aiResponses.default[Math.floor(Math.random()*3)];
+}
+
+function sendChat() {
+  const input = document.getElementById('chat-input');
+  const msg = input.value.trim();
+  if (!msg) return;
+  const msgs = document.getElementById('chat-messages');
+  msgs.innerHTML += `<div class="chat-msg msg-user"><div class="chat-avatar av-user">ME</div><div class="chat-bubble">${msg}</div></div>`;
+  input.value = '';
+  const typing = document.getElementById('chat-typing');
+  typing.classList.add('show');
+  msgs.scrollTop = msgs.scrollHeight;
+  setTimeout(() => {
+    typing.classList.remove('show');
+    const reply = getAIResponse(msg);
+    msgs.innerHTML += `<div class="chat-msg msg-ai"><div class="chat-avatar av-ai">SP</div><div class="chat-bubble">${reply}</div></div>`;
+    msgs.scrollTop = msgs.scrollHeight;
+  }, 1200 + Math.random() * 800);
+}
+
+function quickChat(msg) {
+  document.getElementById('chat-input').value = msg;
+  sendChat();
+}
+</script>
+</body>
+</html>
