@@ -1103,6 +1103,26 @@ function doGet() {
 <div class="toast" id="toast"><div class="toast-msg" id="toast-msg"></div></div>
 
 <script>
+// ============================================================
+// GOOGLE SHEETS CONFIG
+// Paste your Google Sheets Web App URL between the quotes below.
+// Leave it as "" if you have not set one up yet.
+// ============================================================
+const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbxb8JYNur5yO7XQtUw63EXJ_CN-TPuJGeaIut33jFUi2ZwR2lxkaFgZQ4admz9A8Cam6Q/exec";
+// ============================================================
+
+// Sends a data object as one row to your Google Sheet.
+// Every tab that collects user input calls this automatically.
+function logToSheet(data) {
+  if (!GOOGLE_SHEET_URL) return;
+  fetch(GOOGLE_SHEET_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ timestamp: new Date().toISOString(), ...data })
+  }).catch(() => {});
+}
+
 // ============ PAGE ROUTING ============
 function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -1305,13 +1325,8 @@ function submitDashboard() {
   addFeedItem(`${name} joined the ${talent} community with ${hours}h learned this week! 🔥`);
   showToast(`✦ Welcome ${name}! Your data is now live on the dashboard!`);
 
-  // Send to Google Sheets if URL is configured
-  const sheetData = {
-    timestamp: new Date().toISOString(),
-    name, talent, hours, problems_contributed: problems, confidence
-  };
-  sendToSheets(sheetData).catch(() => {});
-  if (!sheetsWebAppUrl) showToast('💡 Tip: Connect a Google Sheet via the ⚙️ Sheets button to save data permanently!');
+  // ── Log to Google Sheet ──
+  logToSheet({ source: 'Dashboard', name, talent, hours, problems_contributed: problems, confidence });
 
   document.getElementById('input-name').value = '';
   document.getElementById('input-hours').value = '';
@@ -1398,6 +1413,8 @@ function showResult() {
   const maxIdx = counts.indexOf(Math.max(...counts));
   const profile = talentProfiles[maxIdx];
 
+  // ── Log to Google Sheet ──
+  logToSheet({ source: 'Discover Quiz', talent_type: profile.type, quiz_answers: quizAnswers.join(',') });
   document.getElementById('quiz-container').style.display = 'none';
   const res = document.getElementById('talent-result');
   res.classList.add('show');
@@ -1472,6 +1489,8 @@ function submitProblem() {
   const labelMap = {edu:'🎓 Education',env:'🌿 Environment',health:'❤️ Health',tech:'💻 Technology'};
   allProblems.unshift({ id: Date.now(), title, cat, tag: tagMap[cat], label: labelMap[cat], desc, members: 1, ideas: 0, likes: 0 });
   renderProblems('all');
+  // ── Log to Google Sheet ──
+  logToSheet({ source: 'Community', problem_title: title, category: cat, description: desc });
   document.getElementById('post-title').value = '';
   document.getElementById('post-desc').value = '';
   document.getElementById('post-category').value = '';
