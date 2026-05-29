@@ -1,0 +1,14 @@
+# TalentVerse robots.txt
+# Website: Teen Talent Discovery Hub
+# Convener: Sarah-Praise Adebimpe Adejunmobi
+# Developer: Stephen Olabamiji
+# Platform: APLM System (AI + Peer Learning Mastery)
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://talentverse.ng/sitemap.xml
+
+# Crawl-delay for bots (optional, keeps server healthy)
+Crawl-delay: 1
