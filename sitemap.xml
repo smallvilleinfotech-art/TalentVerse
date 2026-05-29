@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- TalentVerse Sitemap | Developer: Stephen Olabamiji | Convener: Sarah-Praise Adebimpe Adejunmobi -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+
+  <!-- Homepage: TalentVerse teen talent discovery hub -->
+  <url>
+    <loc>https://talentverse.ng/</loc>
+    <lastmod>2025-05-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Discover: APLM talent quiz -->
+  <url>
+    <loc>https://talentverse.ng/#discover</loc>
+    <lastmod>2025-05-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- APLM System page -->
+  <url>
+    <loc>https://talentverse.ng/#aplm</loc>
+    <lastmod>2025-05-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Community: teen problem squads -->
+  <url>
+    <loc>https://talentverse.ng/#community</loc>
+    <lastmod>2025-05-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Dashboard: live impact data -->
+  <url>
+    <loc>https://talentverse.ng/#dashboard</loc>
+    <lastmod>2025-05-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- About: Sarah-Praise Adebimpe Adejunmobi & Stephen Olabamiji -->
+  <url>
+    <loc>https://talentverse.ng/#about</loc>
+    <lastmod>2025-05-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+</urlset>
